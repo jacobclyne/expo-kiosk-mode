@@ -1,0 +1,51 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.advelit.kioskapp">
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.BIND_DEVICE_ADMIN" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <application
+            android:name=".MainApplication"
+            android:label="@string/app_name"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:allowBackup="false"
+            android:theme="@style/AppTheme">
+
+        <!-- ... Other application settings ... -->
+
+        <!-- Services -->
+        <service
+                android:name=".KioskModeService"
+                android:enabled="true"
+                android:exported="false" />
+
+        <!-- Broadcast Receiver to start service on boot -->
+        <receiver
+                android:name=".KioskModeReceiver"
+                android:enabled="true"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Device Admin Receiver for kiosk mode -->
+        <receiver
+                android:name=".KioskModeAdminReceiver"
+                android:label="Kiosk Mode Admin Receiver"
+                android:description="Administer kiosk mode"
+                android:permission="android.permission.BIND_DEVICE_ADMIN">
+            <meta-data
+                    android:name="android.app.device_admin"
+                    android:resource="@xml/device_admin" />
+            <intent-filter>
+                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- ... Other settings ... -->
+    </application>
+</manifest>
