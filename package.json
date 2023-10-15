@@ -1,15 +1,19 @@
 {
-  "name": "expo-kiosk-mode",
-  "version": "1.0.0",
-  "description": "Your Expo Plugin Description",
+  "name": "react-native-kiosk-mode",
+  "version": "0.0.2",
+  "description": "React Native KioskMode plugin",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test"
   },
   "keywords": [
-    "expo",
-    "react-native"
+    "react-native",
+    "android",
+    "react-component"
   ],
-  "author": "Your Name",
-  "license": "MIT"
+  "author": "Anthony Ou",
+  "license": "MIT",
+  "dependencies": {
+    "debounce": "^1.0.0"
+  }
 }
