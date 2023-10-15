@@ -1,5 +1,0 @@
-rootProject.name = 'example'
-
-include ':app'
-include ':react-native-kiosk-mode'
-project(':react-native-kiosk-mode').projectDir = file('../node_modules/react-native-kiosk-mode/android')

@@ -1,87 +1,96 @@
 
-# This project is no longer maintained
+# react-native-lock-task
 
-# React native kiosk mode functionality for Android
+## Getting started
 
-A simple react native plugin to achieve kiosk mode (immersive mode) on android
+`$ npm install react-native-lock-task --save`
 
+### Mostly automatic installation
 
-##### Props: KioskMode
+`$ react-native link react-native-lock-task`
 
-```html
-import {Immersive} from 'react-native-kiosk-mode'
+### Settings
 
-<View>
-    <Immersive />
-    <RootContainer />
-</View>
+**`yourProject/android/app/src/main/AndroidManifest.xml`**
+
+```diff
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yourProject">
++   <uses-permission android:name="android.permission.MANAGE_DEVICE_ADMINS" />
++   <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
++       android:launchMode="singleTask"
++       android:stateNotNeeded="true">
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
++               <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
++       <receiver android:name="com.rnlocktask.MyAdmin"
++           android:label="@string/sample_device_admin"
++           android:description="@string/sample_device_admin_description"
++           android:permission="android.permission.BIND_DEVICE_ADMIN">
++           <meta-data android:name="android.app.device_admin"
++               android:resource="@xml/my_admin" />
++           <intent-filter>
++               <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
++           </intent-filter>
++       </receiver>
+    </application>
+</manifest>
 ```
 
-------------
 
-## Android Installation
+**`yourProject/android/app/src/main/res/values/strings.xml`**
 
-Install the npm package [`react-native-kiosk-mode`](https://www.npmjs.com/package/react-native-kiosk-mode). Inside your React Native project, run ([example](https://github.com/sciphergfx/react-native-kiosk-mode/tree/master/example)):
-```bash
-npm install --save react-native-kiosk-mode
-```
-
-In `android/settings.gradle`, remove the line `include ':app'` and add the following lines
-```
-include ':react-native-kiosk-mode'
-project(':react-native-kiosk-mode').projectDir = file('../node_modules/react-native-kiosk-mode/android')
-```
-**NOTE** : If you have included other libraries in your project, the `include` line will contain the other dependencies too.
-
-In `android/app/build.gradle`, add a dependency to `':react-native-kiosk-mode'`
+```diff
+<resources>
+    <string name="app_name">yourNameApp</string>
++   <string name="sample_device_admin">yourNameApp</string>
++   <string name="sample_device_admin_description">yourNameAppTitle</string>
+</resources>
 
 ```
-dependencies {
-    compile project(':react-native-kiosk-mode')
-}
+
+**`yourProject/android/app/src/main/res/xml/my_admin.xml`**
+
+```diff
++ <device-admin xmlns:android="http://schemas.android.com/apk/res/android">
++     <uses-policies>
++         <limit-password />
++         <watch-login />
++         <reset-password />
++         <force-lock />
++         <wipe-data />
++     </uses-policies>
++ </device-admin>
+
 ```
+## Reinstall application
+* Start your emulator
+* Install project 
 
-Next, you need to change the `MainApplication` of your app to register `KioskModeModule` :
-```java
-import com.rn.kiosk.mode.KioskModeModule;  // add this import
+## Set owner device adb
+* Settings --> Accounts --> Delete All
+* `adb shell dpm set-device-owner com.yourProject/com.rnlocktask.MyAdmin`
 
-public class MainApplication extends Application implements ReactApplication {
-    //...
+## Usage
+```javascript
+import RNLockTask from 'react-native-lock-task';
 
-    @Override
-    protected List<ReactPackage> getPackages() {
-      return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new KioskModeModule() // add this manager
-      );
-    }
+RNLockTask.startLockTask();
+RNLockTask.startLockTaskWith(["com.google.android.youtube", "com.sega.sonicdash"]);
+RNLockTask.stopLockTask();
+RNLockTask.clearDeviceOwnerApp();
 ```
-Next, you need to add the `onWindowFocusChanged` function to your Apps `MainActivity.java` :
-```java
-import android.view.View;// add this import
- //...
-
-public class MainActivity extends ReactActivity {
-     //...
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-            super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            getWindow().getDecorView()
-        .setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-         }
-    }
-}
-```
-
----
-
-Android kiosk mode for react native by Seyi Ogunbowale
-
----

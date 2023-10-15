@@ -1,4 +1,2 @@
-<manifest
-    xmlns:tools="http://schemas.android.com/tools" package="com.rn.kiosk.mode">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.rnlocktask"  android:exported="true">
 </manifest>
