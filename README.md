@@ -1,13 +1,9 @@
 
-# react-native-lock-task
+# expo-kiosk-mode
 
 ## Getting started
 
-`$ npm install react-native-lock-task --save`
-
-### Mostly automatic installation
-
-`$ react-native link react-native-lock-task`
+`$ npm install expo-kiosk-mode --save`
 
 ### Settings
 
@@ -87,7 +83,7 @@
 
 ## Usage
 ```javascript
-import RNLockTask from 'react-native-lock-task';
+import RNLockTask from 'expo-kiosk-mode';
 
 RNLockTask.startLockTask();
 RNLockTask.startLockTaskWith(["com.google.android.youtube", "com.sega.sonicdash"]);
